@@ -159,6 +159,21 @@ The system operates as a hardware-software cooperative split into four core modu
    Initiating a new voting session explicitly clears all runtime counters from memory and establishes a fresh time epoch, eliminating lingering ghost data from previous rounds.
 
 ---
+---
+### 🚀 Smart EVM Console v1.0.0
+
+Standalone Windows control application for the ESP32 E-Voting System.
+
+#### Features:
+- Live voter polling & status monitoring
+- Anti-tamper administrative controls
+- Integrated audio feedback & result modal triggers
+
+#### Installation:
+Download `Smart EVM Console 1.0.0.exe` below and run it directly on Windows (no installation required).
+
+
+---
 
 ## 🔌 Circuit Pinout & Wiring Specifications
 
