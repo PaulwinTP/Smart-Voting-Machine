@@ -5,7 +5,12 @@ An IoT-enabled, anti-tamper Electronic Voting System built using the **ESP32** m
 The system leverages local Wi-Fi communication to serve a responsive **Glassmorphic Web UI** that streams real-time voting data, tracks session durations, enforces strict single-vote polling lockouts, renders multi-stage winner announcement animations, and synthesizes audio feedback using the browser's native **Web Audio API**.
 
 ---
+### 🚀 Smart EVM Console v1.0.0
 
+Smart EVM Console is a dedicated Windows-based administrative control suite engineered to manage and monitor the ESP32 E-Voting System in real time. Built with an intuitive glassmorphic interface, the software communicates directly with the hardware over an isolated local Wi-Fi Access Point via asynchronous REST API endpoints. It gives election administrators total operational oversight—enabling live session tracking, real-time vote count polling, anti-tamper voter authorization lockouts, and browser-synthesized audio feedback through the Web Audio API. When polling concludes, the console manages a synchronized, three-stage result reveal sequence on screen while triggering rapid visual LED victory animations on the physical machine.
+
+
+---
 ## 👤 Author & Developer Information
 <div align="center">
 
@@ -159,21 +164,7 @@ The system operates as a hardware-software cooperative split into four core modu
    Initiating a new voting session explicitly clears all runtime counters from memory and establishes a fresh time epoch, eliminating lingering ghost data from previous rounds.
 
 ---
----
-### 🚀 Smart EVM Console v1.0.0
 
-Standalone Windows control application for the ESP32 E-Voting System.
-
-#### Features:
-- Live voter polling & status monitoring
-- Anti-tamper administrative controls
-- Integrated audio feedback & result modal triggers
-
-#### Installation:
-Download `Smart EVM Console 1.0.0.exe` below and run it directly on Windows (no installation required).
-
-
----
 
 ## 🔌 Circuit Pinout & Wiring Specifications
 
