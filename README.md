@@ -7,11 +7,13 @@ The system leverages local Wi-Fi communication to serve a responsive **Glassmorp
 ---
 
 ## 👤 Author & Developer Information
+<div align="center">
 
-* **Developer:** **Paulwin T P**
-* **Role:** Founder & Embedded Systems Lead
-* **GitHub:** [github.com/Paulwin-T-P](https://github.com/Paulwin-T-P) 
-* **LinkedIn:** [linkedin.com/in/paulwin-t-p](https://www.linkedin.com/in/paulwin-t-p/)---
+### **Paulwin TP**
+*B.Tech Student | Developer & Computer Vision Enthusiast*
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/PaulwinTP)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paulwin-t-p)
 
 ## 📸 Media Preview & System Gallery
 
