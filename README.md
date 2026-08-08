@@ -18,10 +18,12 @@ The system leverages local Wi-Fi communication to serve a responsive **Glassmorp
 ## 📸 Media Preview & System Gallery
 
 ### 1. Circuit Schematic & Hardware Layout
-| Circuit Schematic Diagram | Physical Hardware Wiring |
-| :---: | :---: |
-| ![Circuit Diagram](assets/circuit_diagram.png) | ![Physical Hardware](assets/hardware_setup.jpg) |
-
+| Circuit Schematic Diagram |
+| :---: | 
+| ![Circuit Diagram](assets/circuit_diagram.png) |
+| Physical Hardware Wiring |
+| :---: |
+| ![Physical Hardware](assets/hardware_setup.jpg) |
 ### 2. Live Web Dashboard
 | Glassmorphic Administration UI |
 | :---: |
