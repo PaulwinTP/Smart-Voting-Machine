@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Voting Machine Control Console</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    padding: 24px;
+  }
+
+  /* Glassmorphism Standard */
+  .glass {
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 114, 255, 0.25);
+  }
+
+  /* Top Header & Status Bar */
+  .header {
+    width: 100%;
+    max-width: 900px;
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 1.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .status-bar-container {
+    width: 100%;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 7px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .status-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00ffcc, #00e676);
+    transition: width 0.4s ease;
+    box-shadow: 0 0 10px #00ffcc;
+  }
+
+  /* Connection Control Bar */
+  .conn-box {
+    width: 100%;
+    max-width: 900px;
+    padding: 18px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff5252;
+    box-shadow: 0 0 8px #ff5252;
+  }
+
+  .dot.active {
+    background: #00ffcc;
+    box-shadow: 0 0 8px #00ffcc;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.9);
+    color: #0072ff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .btn:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  .btn-start {
+    background: #00ffcc;
+    color: #004d40;
+    font-weight: 700;
+  }
+
+  .btn-stop {
+    background: #ff5252;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .btn-allow {
+    background: #e040fb;
+    color: #ffffff;
+    display: none;
+    font-weight: 700;
+  }
+
+  /* Main Big Box */
+  .main-box {
+    width: 100%;
+    max-width: 900px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+  }
+
+  .square-box {
+    padding: 32px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 180px;
+  }
+
+  .square-box h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .stat-val {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-top: 8px;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+  }
+
+  .rect-btn {
+    width: 100%;
+    padding: 22px;
+    font-size: 1.25rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    cursor: pointer;
+  }
+
+  .rect-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Popup Modal Overlay */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 20, 50, 0.65);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-card {
+    width: 90%;
+    max-width: 520px;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .loader {
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    border-top: 5px solid #00ffcc;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    animation: spin 1s linear infinite;
+    margin: 24px auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .result-rank {
+    background: rgba(255,255,255,0.15);
+    padding: 12px;
+    border-radius: 10px;
+    margin: 10px 0;
+    font-size: 1.1rem;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Top Status Header -->
+  <div class="glass header">
+    <h1>Smart E-Voting Machine</h1>
+    <div class="status-bar-container">
+      <div id="statusFill" class="status-fill"></div>
+    </div>
+  </div>
+
+  <!-- Connection & Control Bar -->
+  <div class="glass conn-box">
+    <div class="status-indicator">
+      <div id="statusDot" class="dot"></div>
+      <div>System Status: <strong id="connStatus">Idle / Stopped</strong></div>
+    </div>
+    <div class="btn-group">
+      <button id="toggleSessionBtn" class="btn btn-start" onclick="toggleSession()">Start Session</button>
+      <button id="allowBtn" class="btn btn-allow" onclick="allowNextVoter()">Allow Next Voter</button>
+    </div>
+  </div>
+
+  <!-- Main Grid Box -->
+  <div class="glass main-box">
+    <div class="stats-grid">
+      <div class="glass square-box">
+        <h3>Total Votes Cast</h3>
+        <div id="liveCount" class="stat-val">0</div>
+      </div>
+      <div class="glass square-box">
+        <h3>Voting Duration</h3>
+        <div id="timer" class="stat-val">00:00</div>
+      </div>
+    </div>
+    <button class="glass rect-btn" onclick="fetchResults()">View Election Results</button>
+  </div>
+
+  <!-- Result Modal -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="glass modal-card">
+      <div id="modalContent">
+        <h2>Counting Votes...</h2>
+        <div class="loader"></div>
+        <p>Analyzing results from hardware memory</p>
+      </div>
+      <button id="closeModalBtn" class="btn" style="display:none; margin-top:24px;" onclick="closeModal()">Close Window</button>
+    </div>
+  </div>
+
+<script>
+  const ESP32_IP = "http://192.168.4.1";
+  let audioCtx = null;
+  let lastVoteCount = 0;
+  let isSessionRunning = false;
+
+  function playSound(type) {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    let osc = audioCtx.createOscillator();
+    let gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'vote') {
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
+    } else if (type === 'start') {
+      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.25);
+    } else if (type === 'winner') {
+      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.5);
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    }
+  }
+
+  function formatTime(sec) {
+    let m = String(Math.floor(sec / 60)).padStart(2, '0');
+    let s = String(sec % 60).padStart(2, '0');
+    return `${m}:${s}`;
+  }
+
+  // Dashboard Polling Interval (500ms)
+  setInterval(async () => {
+    try {
+      let res = await fetch(`${ESP32_IP}/status`);
+      let data = await res.json();
+      
+      document.getElementById('liveCount').innerText = data.total;
+      isSessionRunning = data.session;
+
+      const toggleBtn = document.getElementById('toggleSessionBtn');
+      if (data.session) {
+        document.getElementById('connStatus').innerText = "Voting Session Active";
+        document.getElementById('statusDot').classList.add('active');
+        document.getElementById('statusFill').style.width = "100%";
+        document.getElementById('timer').innerText = formatTime(data.elapsed);
+
+        toggleBtn.innerText = "Stop Session";
+        toggleBtn.className = "btn btn-stop";
+      } else {
+        document.getElementById('connStatus').innerText = "System Idle / Stopped";
+        document.getElementById('statusDot').classList.remove('active');
+        document.getElementById('statusFill').style.width = "0%";
+        document.getElementById('timer').innerText = "00:00";
+
+        toggleBtn.innerText = "Start Session";
+        toggleBtn.className = "btn btn-start";
+      }
+
+      // Show "Allow Next Voter" button if session is active and voter is locked out
+      if (data.session && !data.ready) {
+        document.getElementById('allowBtn').style.display = 'block';
+      } else {
+        document.getElementById('allowBtn').style.display = 'none';
+      }
+
+      // Audio trigger when vote increments
+      if (data.total > lastVoteCount) {
+        playSound('vote');
+      }
+      lastVoteCount = data.total;
+
+    } catch (err) {
+      document.getElementById('connStatus').innerText = "Searching for ESP32...";
+      document.getElementById('statusDot').classList.remove('active');
+    }
+  }, 500);
+
+  // Toggle Session Start / Stop from Software
+  async function toggleSession() {
+    try {
+      let endpoint = isSessionRunning ? "/stop" : "/start";
+      await fetch(`${ESP32_IP}${endpoint}`);
+      playSound('start');
+    } catch(e) {}
+  }
+
+  // Allow Next Voter command
+  async function allowNextVoter() {
+    try {
+      await fetch(`${ESP32_IP}/allow`);
+      playSound('start');
+    } catch(e) {}
+  }
+
+  // 3-Stage Animated Results Modal
+  async function fetchResults() {
+    document.getElementById('modalOverlay').style.display = 'flex';
+    document.getElementById('modalContent').innerHTML = `
+      <h2>Counting Votes...</h2>
+      <div class="loader"></div>
+      <p>Analyzing results from hardware memory</p>
+    `;
+    document.getElementById('closeModalBtn').style.display = 'none';
+
+    try {
+      let res = await fetch(`${ESP32_IP}/results`);
+      let data = await res.json();
+
+      setTimeout(() => {
+        document.getElementById('modalContent').innerHTML = `
+          <h2 style="margin-bottom: 20px;">Current Standings</h2>
+          <div class="result-rank">🥇 1st Place: <strong>Candidate ${data.rank[0].id}</strong> (${data.rank[0].votes} votes)</div>
+          <div class="result-rank">🥈 2nd Place: <strong>Candidate ${data.rank[1].id}</strong> (${data.rank[1].votes} votes)</div>
+          <div class="result-rank">🥉 3rd Place: <strong>Candidate ${data.rank[2].id}</strong> (${data.rank[2].votes} votes)</div>
+        `;
+
+        setTimeout(() => {
+          let winner = data.rank[0];
+          let second = data.rank[1];
+          let diff = winner.votes - second.votes;
+
+          document.getElementById('modalContent').innerHTML = `
+            <h1 style="color: #00ffcc; margin-bottom: 12px; font-size: 2rem;">WINNER DECLARED!</h1>
+            <h2 style="font-size: 1.6rem; margin-bottom: 16px;">Candidate ${winner.id}</h2>
+            <p style="font-size: 1.1rem; line-height: 1.5;">
+              Selected as the official member with <strong>${winner.votes}</strong> total votes (${diff} votes higher than the runner-up).
+            </p>
+          `;
+          document.getElementById('closeModalBtn').style.display = 'inline-block';
+          playSound('winner');
+        }, 5000);
+
+      }, 5000);
+
+    } catch(e) {
+      document.getElementById('modalContent').innerHTML = `
+        <h2 style="color: #ff5252;">Connection Error</h2>
+        <p>Could not reach the ESP32 voting machine. Make sure you are connected to the ESP32 Wi-Fi network.</p>
+      `;
+      document.getElementById('closeModalBtn').style.display = 'inline-block';
+    }
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
+  }
+</script>
+</body>
+</html>
